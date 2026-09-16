@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Task Manager</title>
+</head>
+
+<body>
+
+    <h1>DevOps Task Manager</h1>
+
+    <form action="/add" method="POST">
+        <input
+            type="text"
+            name="title"
+            placeholder="Enter a new task"
+            required
+        >
+        <button type="submit">Add Task</button>
+    </form>
+
+    <h2>Tasks</h2>
+
+    {% if tasks %}
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    {% if task.completed %}
+                        <s>{{ task.title }}</s>
+                    {% else %}
+                        {{ task.title }}
+                        <a href="/complete/{{ task.id }}">
+                            <button>Complete</button>
+                        </a>
+                    {% endif %}
+
+                    <a href="/delete/{{ task.id }}">
+                        <button>Delete</button>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tasks available.</p>
+    {% endif %}
+
+</body>
+</html>
