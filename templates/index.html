@@ -1,49 +1,1581 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevOps Task Manager</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TaskFlow | Dashboard</title>
+
+
+    <style>
+
+        /* ================================
+           GLOBAL
+        ================================= */
+
+        * {
+
+            margin: 0;
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+
+        :root {
+
+            --bg: #f5f7fb;
+
+            --card: #ffffff;
+
+            --text: #111827;
+
+            --muted: #6b7280;
+
+            --border: #e5e7eb;
+
+            --primary: #6366f1;
+
+            --primary-dark: #4f46e5;
+
+            --success: #10b981;
+
+            --danger: #ef4444;
+
+            --shadow:
+                0 10px 30px rgba(15,23,42,0.06);
+
+        }
+
+
+        body.dark {
+
+            --bg: #0b1120;
+
+            --card: #111827;
+
+            --text: #f9fafb;
+
+            --muted: #9ca3af;
+
+            --border: #1f2937;
+
+            --shadow:
+                0 10px 30px rgba(0,0,0,0.25);
+
+        }
+
+
+        body {
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: var(--bg);
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+            transition:
+                background 0.3s,
+                color 0.3s;
+
+        }
+
+
+        /* ================================
+           NAVBAR
+        ================================= */
+
+        .navbar {
+
+            height: 75px;
+
+            background: var(--card);
+
+            border-bottom:
+                1px solid var(--border);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 6%;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+        }
+
+
+        .brand-icon {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 11px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #9333ea
+                );
+
+            box-shadow:
+                0 7px 18px rgba(79,70,229,0.3);
+
+        }
+
+
+        .nav-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+        }
+
+
+        /* ================================
+           SEARCH
+        ================================= */
+
+        .search-box {
+
+            position: relative;
+
+        }
+
+
+        .search-box span {
+
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: var(--muted);
+
+        }
+
+
+        #searchInput {
+
+            width: 260px;
+
+            padding:
+                11px 15px 11px 42px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 12px;
+
+            background: var(--bg);
+
+            color: var(--text);
+
+            outline: none;
+
+            transition: 0.2s;
+
+        }
+
+
+        #searchInput:focus {
+
+            border-color: var(--primary);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(99,102,241,0.12);
+
+        }
+
+
+        /* ================================
+           BUTTONS
+        ================================= */
+
+        .icon-button {
+
+            width: 42px;
+
+            height: 42px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            background: var(--card);
+
+            color: var(--text);
+
+            cursor: pointer;
+
+            font-size: 18px;
+
+            transition: 0.2s;
+
+        }
+
+
+        .icon-button:hover {
+
+            transform: translateY(-2px);
+
+            border-color: var(--primary);
+
+        }
+
+
+        .logout {
+
+            text-decoration: none;
+
+            padding:
+                11px 17px;
+
+            border-radius: 11px;
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+
+            font-weight: 600;
+
+            font-size: 14px;
+
+        }
+
+
+        /* ================================
+           MAIN
+        ================================= */
+
+        .container {
+
+            width: 88%;
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding: 42px 0 60px;
+
+        }
+
+
+        .welcome {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: end;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .welcome h1 {
+
+            font-size: 34px;
+
+            margin-bottom: 7px;
+
+            letter-spacing: -1px;
+
+        }
+
+
+        .welcome p {
+
+            color: var(--muted);
+
+            font-size: 15px;
+
+        }
+
+
+        .date-badge {
+
+            padding: 10px 15px;
+
+            border-radius: 10px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+        }
+
+
+        /* ================================
+           STATS
+        ================================= */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .stat-card {
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 18px;
+
+            padding: 23px;
+
+            box-shadow: var(--shadow);
+
+            transition: 0.25s;
+
+            position: relative;
+
+            overflow: hidden;
+
+        }
+
+
+        .stat-card:hover {
+
+            transform:
+                translateY(-4px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(15,23,42,0.1);
+
+        }
+
+
+        .stat-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 17px;
+
+        }
+
+
+        .stat-icon {
+
+            width: 43px;
+
+            height: 43px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 19px;
+
+        }
+
+
+        .purple {
+
+            background: #ede9fe;
+
+        }
+
+
+        .green {
+
+            background: #d1fae5;
+
+        }
+
+
+        .orange {
+
+            background: #ffedd5;
+
+        }
+
+
+        .blue {
+
+            background: #dbeafe;
+
+        }
+
+
+        .stat-label {
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+        }
+
+
+        .stat-value {
+
+            font-size: 29px;
+
+            font-weight: 800;
+
+        }
+
+
+        /* ================================
+           CONTENT GRID
+        ================================= */
+
+        .content-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                0.9fr 1.6fr;
+
+            gap: 22px;
+
+        }
+
+
+        .card {
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 20px;
+
+            padding: 27px;
+
+            box-shadow: var(--shadow);
+
+        }
+
+
+        .card-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .card-header h2 {
+
+            font-size: 18px;
+
+        }
+
+
+        .card-header p {
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 4px;
+
+        }
+
+
+        /* ================================
+           PROGRESS
+        ================================= */
+
+        .progress-area {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 300px;
+
+        }
+
+
+        .progress-ring {
+
+            width: 190px;
+
+            height: 190px;
+
+            border-radius: 50%;
+
+            background:
+                conic-gradient(
+                    var(--primary)
+                    {{ progress }}%,
+                    var(--border)
+                    {{ progress }}%
+                );
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            position: relative;
+
+            animation: fillRing 1.3s ease;
+
+        }
+
+
+        @keyframes fillRing {
+
+            from {
+
+                transform: scale(0.75);
+
+                opacity: 0.3;
+
+            }
+
+            to {
+
+                transform: scale(1);
+
+                opacity: 1;
+
+            }
+
+        }
+
+
+        .progress-ring::before {
+
+            content: "";
+
+            width: 145px;
+
+            height: 145px;
+
+            border-radius: 50%;
+
+            background: var(--card);
+
+            position: absolute;
+
+        }
+
+
+        .progress-content {
+
+            position: relative;
+
+            text-align: center;
+
+        }
+
+
+        .progress-number {
+
+            font-size: 34px;
+
+            font-weight: 800;
+
+        }
+
+
+        .progress-label {
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+        }
+
+
+        .progress-message {
+
+            margin-top: 20px;
+
+            color: var(--muted);
+
+            text-align: center;
+
+            font-size: 14px;
+
+        }
+
+
+        /* ================================
+           TASKS
+        ================================= */
+
+        .add-form {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .add-form input {
+
+            flex: 1;
+
+            padding: 13px 15px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 11px;
+
+            background: var(--bg);
+
+            color: var(--text);
+
+            outline: none;
+
+        }
+
+
+        .add-button {
+
+            padding:
+                0 18px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #9333ea
+                );
+
+            color: white;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+        }
+
+
+        .task {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 16px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 14px;
+
+            margin-bottom: 11px;
+
+            transition: 0.2s;
+
+            animation: taskIn 0.3s ease;
+
+        }
+
+
+        @keyframes taskIn {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(8px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+
+        .task:hover {
+
+            border-color: #c7d2fe;
+
+            transform:
+                translateX(3px);
+
+        }
+
+
+        .task-check {
+
+            width: 34px;
+
+            height: 34px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            flex-shrink: 0;
+
+            background: #eef2ff;
+
+            color: var(--primary);
+
+            font-weight: 800;
+
+        }
+
+
+        .task-info {
+
+            flex: 1;
+
+            min-width: 0;
+
+        }
+
+
+        .task-title {
+
+            font-weight: 650;
+
+            font-size: 14px;
+
+            word-break: break-word;
+
+        }
+
+
+        .task.completed .task-title {
+
+            text-decoration: line-through;
+
+            color: var(--muted);
+
+        }
+
+
+        .status {
+
+            display: inline-block;
+
+            margin-top: 6px;
+
+            padding: 4px 8px;
+
+            border-radius: 7px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+        }
+
+
+        .status.done {
+
+            background: #d1fae5;
+
+            color: #047857;
+
+        }
+
+
+        .status.pending {
+
+            background: #fef3c7;
+
+            color: #b45309;
+
+        }
+
+
+        .task-actions {
+
+            display: flex;
+
+            gap: 6px;
+
+        }
+
+
+        .action {
+
+            text-decoration: none;
+
+            width: 34px;
+
+            height: 34px;
+
+            border-radius: 9px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+
+        }
+
+
+        .complete {
+
+            background: #d1fae5;
+
+            color: #047857;
+
+        }
+
+
+        .delete {
+
+            background: #fee2e2;
+
+            color: #dc2626;
+
+        }
+
+
+        .action:hover {
+
+            transform: scale(1.08);
+
+        }
+
+
+        .empty {
+
+            text-align: center;
+
+            padding: 45px 10px;
+
+            color: var(--muted);
+
+        }
+
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media(max-width: 950px) {
+
+            .stats {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+            .content-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media(max-width: 650px) {
+
+            .navbar {
+
+                padding: 0 5%;
+
+            }
+
+            .search-box {
+
+                display: none;
+
+            }
+
+            .container {
+
+                width: 92%;
+
+            }
+
+            .welcome {
+
+                align-items: start;
+
+                flex-direction: column;
+
+                gap: 15px;
+
+            }
+
+            .welcome h1 {
+
+                font-size: 28px;
+
+            }
+
+            .stats {
+
+                grid-template-columns: 1fr 1fr;
+
+            }
+
+            .stat-card {
+
+                padding: 17px;
+
+            }
+
+            .stat-value {
+
+                font-size: 24px;
+
+            }
+
+            .add-form {
+
+                flex-direction: column;
+
+            }
+
+            .add-button {
+
+                padding: 13px;
+
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-    <h1>DevOps Task Manager</h1>
 
-    <form action="/add" method="POST">
-        <input
-            type="text"
-            name="title"
-            placeholder="Enter a new task"
-            required
+<!-- ================================
+     NAVBAR
+================================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ✓
+        </div>
+
+        TaskFlow
+
+    </div>
+
+
+    <div class="nav-right">
+
+        <div class="search-box">
+
+            <span>⌕</span>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search tasks..."
+                onkeyup="searchTasks()"
+            >
+
+        </div>
+
+
+        <button
+            class="icon-button"
+            onclick="toggleTheme()"
+            id="themeButton"
+            title="Toggle theme"
         >
-        <button type="submit">Add Task</button>
-    </form>
+            ☀️
+        </button>
 
-    <h2>Tasks</h2>
 
-    {% if tasks %}
-        <ul>
-            {% for task in tasks %}
-                <li>
-                    {% if task.completed %}
-                        <s>{{ task.title }}</s>
+        <a
+            href="{{ url_for('logout') }}"
+            class="logout"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================================
+     MAIN
+================================= -->
+
+<main class="container">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <div>
+
+            <h1>
+                Good to see you, {{ username }} 👋
+            </h1>
+
+            <p>
+                Here's your productivity overview for today.
+            </p>
+
+        </div>
+
+
+        <div class="date-badge">
+
+            🚀 DevOps Task Manager
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================
+         STATISTICS
+    ================================= -->
+
+    <section class="stats">
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-label">
+                    TOTAL TASKS
+                </span>
+
+                <div class="stat-icon purple">
+                    📋
+                </div>
+
+            </div>
+
+            <div class="stat-value">
+                {{ total_tasks }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-label">
+                    COMPLETED
+                </span>
+
+                <div class="stat-icon green">
+                    ✓
+                </div>
+
+            </div>
+
+            <div class="stat-value">
+                {{ completed_tasks }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-label">
+                    PENDING
+                </span>
+
+                <div class="stat-icon orange">
+                    ⏳
+                </div>
+
+            </div>
+
+            <div class="stat-value">
+                {{ pending_tasks }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-label">
+                    COMPLETION
+                </span>
+
+                <div class="stat-icon blue">
+                    📈
+                </div>
+
+            </div>
+
+            <div class="stat-value">
+                {{ progress }}%
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ================================
+         CONTENT
+    ================================= -->
+
+    <section class="content-grid">
+
+
+        <!-- PROGRESS -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Your Progress
+                    </h2>
+
+                    <p>
+                        Keep moving forward
+                    </p>
+
+                </div>
+
+                <span>
+                    🎯
+                </span>
+
+            </div>
+
+
+            <div class="progress-area">
+
+                <div class="progress-ring">
+
+                    <div class="progress-content">
+
+                        <div class="progress-number">
+                            {{ progress }}%
+                        </div>
+
+                        <div class="progress-label">
+                            COMPLETE
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <p class="progress-message">
+
+                    {{ completed_tasks }}
+                    of
+                    {{ total_tasks }}
+                    tasks completed
+
+                    {% if progress == 100 %}
+                        🎉 All done!
+                    {% elif progress >= 50 %}
+                        🔥 Great progress!
                     {% else %}
-                        {{ task.title }}
-                        <a href="/complete/{{ task.id }}">
-                            <button>Complete</button>
-                        </a>
+                        💪 Keep going!
                     {% endif %}
 
-                    <a href="/delete/{{ task.id }}">
-                        <button>Delete</button>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No tasks available.</p>
-    {% endif %}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- TASK LIST -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        My Tasks
+                    </h2>
+
+                    <p>
+                        Manage your daily work
+                    </p>
+
+                </div>
+
+                <span>
+                    ✨
+                </span>
+
+            </div>
+
+
+            <!-- ADD TASK -->
+
+            <form
+                action="{{ url_for('add_task') }}"
+                method="POST"
+                class="add-form"
+            >
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="What needs to be done?"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="add-button"
+                >
+                    + Add Task
+                </button>
+
+            </form>
+
+
+            <!-- TASKS -->
+
+            <div id="taskList">
+
+
+                {% for task in tasks %}
+
+                <div
+                    class="task {% if task.completed %}completed{% endif %}"
+                    data-title="{{ task.title | lower }}"
+                >
+
+
+                    <div class="task-check">
+
+                        {% if task.completed %}
+                            ✓
+                        {% else %}
+                            ○
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="task-info">
+
+                        <div class="task-title">
+
+                            {{ task.title }}
+
+                        </div>
+
+
+                        {% if task.completed %}
+
+                            <span class="status done">
+                                COMPLETED
+                            </span>
+
+                        {% else %}
+
+                            <span class="status pending">
+                                IN PROGRESS
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="task-actions">
+
+
+                        {% if not task.completed %}
+
+                        <a
+                            href="{{ url_for('complete_task', task_id=task.id) }}"
+                            class="action complete"
+                            title="Complete task"
+                        >
+                            ✓
+                        </a>
+
+                        {% endif %}
+
+
+                        <a
+                            href="{{ url_for('delete_task', task_id=task.id) }}"
+                            class="action delete"
+                            title="Delete task"
+                            onclick="return confirm('Delete this task?')"
+                        >
+                            🗑
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+                {% else %}
+
+                <div class="empty">
+
+                    <div style="font-size:40px;margin-bottom:10px;">
+                        🎉
+                    </div>
+
+                    <strong>No tasks yet</strong>
+
+                    <p style="margin-top:5px;">
+                        Add your first task above.
+
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<script>
+
+    /* ================================
+       DARK / LIGHT MODE
+    ================================= */
+
+    function toggleTheme() {
+
+        document.body.classList.toggle("dark");
+
+        const darkMode =
+            document.body.classList.contains("dark");
+
+        localStorage.setItem(
+            "darkMode",
+            darkMode
+        );
+
+        updateThemeIcon();
+
+    }
+
+
+    function updateThemeIcon() {
+
+        const button =
+            document.getElementById("themeButton");
+
+        if (
+            document.body.classList.contains("dark")
+        ) {
+
+            button.textContent = "🌙";
+
+        } else {
+
+            button.textContent = "☀️";
+
+        }
+
+    }
+
+
+    /* Load saved theme */
+
+    if (
+        localStorage.getItem("darkMode")
+        === "true"
+    ) {
+
+        document.body.classList.add("dark");
+
+    }
+
+
+    updateThemeIcon();
+
+
+    /* ================================
+       SEARCH
+    ================================= */
+
+    function searchTasks() {
+
+        const searchInput =
+            document
+                .getElementById("searchInput")
+                .value
+                .toLowerCase()
+                .trim();
+
+
+        const taskElements =
+            document.querySelectorAll(".task");
+
+
+        taskElements.forEach(function(task) {
+
+            const title =
+                task
+                    .getAttribute("data-title")
+                    .toLowerCase();
+
+
+            if (
+                title.includes(searchInput)
+            ) {
+
+                task.style.display = "flex";
+
+            } else {
+
+                task.style.display = "none";
+
+            }
+
+        });
+
+    }
+
+</script>
+
 
 </body>
+
 </html>
